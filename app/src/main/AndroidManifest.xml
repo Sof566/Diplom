@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- разрешение на интернет (у тебя оно уже есть, можно оставить) -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,25 +16,37 @@
         android:theme="@style/Theme.VodocanalMobileApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-            android:name=".ServerSettingsActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- остальные экраны -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MeterActivity" />
-        <activity android:name=".PaymentsActivity" />
-        <activity android:name=".EmailConfirmActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".EmailConfirmActivity"
+            android:exported="false" />
+
+
+
+        <activity
+            android:name=".ServerSettingsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

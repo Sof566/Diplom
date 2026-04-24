@@ -1,56 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center"
-    android:background="@drawable/login_background"
+    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="32dp"/>
-    <!--android:src="@drawable/water_logo"-->
-
     <EditText
-        android:id="@+id/loginInput"
+        android:id="@+id/etLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Электронная почта"
-        android:inputType="textEmailAddress"
-        android:background="@drawable/edittext_style"
-        android:padding="12dp"/>
+        android:layout_height="64dp"
+        android:hint="Логин" />
 
     <EditText
-        android:id="@+id/passwordInput"
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
         android:hint="Пароль"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:background="@drawable/edittext_style"
-        android:padding="12dp"
-        android:drawableEnd="@drawable/ic_eye"
-        android:layout_marginTop="16dp"/>
-    <Button
-        android:id="@+id/loginButton"
-        android:text="Войти"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
+        android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/regButton"
+        android:id="@+id/btnLogin"
+        android:text="Вход"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Нет аккаунта? Зарегистрироваться"
-        android:layout_marginTop="12dp"/>
-
-    <Button
-        android:id="@+id/serverButton"
-        android:text="Настройки сервера"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

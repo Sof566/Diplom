@@ -1,31 +1,35 @@
 package com.example.vodocanalmobileapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.vodocanalmobileapp.LoginActivity;
+import com.example.vodocanalmobileapp.R;
+import com.example.vodocanalmobileapp.RegisterActivity;
+
 public class MainActivity extends AppCompatActivity {
 
-    TextView nameText;
-    TextView accountText;
-    TextView balanceText;
+    Button btnGoRegister, btnGoLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nameText = findViewById(R.id.nameText);
-        accountText = findViewById(R.id.accountText);
-        balanceText = findViewById(R.id.balanceText);
+        btnGoRegister = findViewById(R.id.btnGoRegister);
+        btnGoLogin = findViewById(R.id.btnGoLogin);
 
-        String name = getIntent().getStringExtra("name");
-        String account = getIntent().getStringExtra("account");
-        int balance = getIntent().getIntExtra("balance",0);
+        btnGoRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
 
-        nameText.setText("Имя: " + name);
-        accountText.setText("Лицевой счет: " + account);
-        balanceText.setText("Баланс: " + balance + " ₽");
+        btnGoLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
     }
 }

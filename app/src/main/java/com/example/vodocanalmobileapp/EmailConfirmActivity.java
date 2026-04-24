@@ -71,12 +71,12 @@ public class EmailConfirmActivity extends AppCompatActivity {
                                 Toast.LENGTH_LONG
                         ).show();
 
-                        Intent intent =
+                        /*Intent intent =
                                 new Intent(EmailConfirmActivity.this,
                                         LoginActivity.class);
 
                         startActivity(intent);
-                        finish();
+                        finish();*/
 
                     }else{
 

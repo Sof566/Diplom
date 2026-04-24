@@ -1,169 +1,57 @@
 package com.example.vodocanalmobileapp;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
-import com.example.vodocanalmobileapp.api.ApiService;
-import com.example.vodocanalmobileapp.api.RetrofitClient;
-import com.example.vodocanalmobileapp.models.LoginRequest;
-import com.example.vodocanalmobileapp.models.LoginResponse;
+import com.example.vodocanalmobileapp.R;
+import com.example.vodocanalmobileapp.api.database.AppDatabase;
+import com.example.vodocanalmobileapp.entity.UserEntity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText loginInput;
-    EditText passwordInput;
+    EditText etLogin, etPassword;
+    Button btnLogin;
 
-    Button loginButton;
-    Button regButton;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginInput = findViewById(R.id.loginInput);
-        passwordInput = findViewById(R.id.passwordInput);
+        etLogin = findViewById(R.id.etLogin);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
 
-        loginButton = findViewById(R.id.loginButton);
-        regButton = findViewById(R.id.regButton);
+        db = Room.databaseBuilder(
+                getApplicationContext(),
+                AppDatabase.class,
+                "tictocblyat"
+        ).allowMainThreadQueries().build();
 
-        loginButton.setOnClickListener(v -> login());
+        btnLogin.setOnClickListener(v -> {
 
-        passwordInput.setOnTouchListener((v, event) -> {
+            try {
 
-            if(event.getAction() == android.view.MotionEvent.ACTION_UP){
+                String login = etLogin.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
 
-                android.graphics.drawable.Drawable drawable =
-                        passwordInput.getCompoundDrawables()[2];
+                UserEntity user = db.userDao().login(login, password);
 
-                if(drawable != null){
-
-                    if(event.getRawX() >=
-                            (passwordInput.getRight() - drawable.getBounds().width())){
-
-                        if(passwordInput.getTransformationMethod()
-                                instanceof android.text.method.PasswordTransformationMethod){
-
-                            passwordInput.setTransformationMethod(null);
-
-                        }else{
-
-                            passwordInput.setTransformationMethod(
-                                    android.text.method.PasswordTransformationMethod.getInstance());
-
-                        }
-
-                        passwordInput.setSelection(passwordInput.getText().length());
-
-                        return true;
-                    }
+                if (user != null) {
+                    Toast.makeText(this, "Успешный вход", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Неверный логин или пароль", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            return false;
-        });
-
-        Button serverButton = findViewById(R.id.serverButton);
-
-        serverButton.setOnClickListener(v -> {
-
-            Intent intent =
-                    new Intent(LoginActivity.this,
-                            ServerSettingsActivity.class);
-
-            startActivity(intent);
-
-        });
-
-        regButton.setOnClickListener(v -> {
-
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
-
-        });
-    }
-
-    private void login(){
-
-        String email = loginInput.getText().toString().trim();
-        String password = passwordInput.getText().toString().trim();
-
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            loginInput.setError("Введите корректный email");
-            return;
-        }
-
-        if(password.length() < 4){
-            passwordInput.setError("Пароль слишком короткий");
-            return;
-        }
-
-        LoginRequest request = new LoginRequest(email,password);
-
-        ApiService api = RetrofitClient
-                .getInstance(this)
-                .create(ApiService.class);
-
-        Call<LoginResponse> call = api.login(request);
-
-        call.enqueue(new Callback<LoginResponse>() {
-
-            @Override
-            public void onResponse(Call<LoginResponse> call,
-                                   Response<LoginResponse> response) {
-
-                if(response.isSuccessful() && response.body()!=null){
-
-                    LoginResponse res = response.body();
-
-                    if(res.status.equals("success")){
-
-                        SharedPreferences prefs =
-                                getSharedPreferences("user",MODE_PRIVATE);
-
-                        prefs.edit()
-                                .putString("email",email)
-                                .putString("name",res.name)
-                                .apply();
-
-                        Toast.makeText(LoginActivity.this,
-                                "Добро пожаловать "+res.name,
-                                Toast.LENGTH_LONG).show();
-
-                        Intent intent =
-                                new Intent(LoginActivity.this,MainActivity.class);
-
-                        startActivity(intent);
-                        finish();
-
-                    }else{
-
-                        Toast.makeText(LoginActivity.this,
-                                "Неверный email или пароль",
-                                Toast.LENGTH_LONG).show();
-
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-
-                Toast.makeText(LoginActivity.this,
-                        "Ошибка соединения с сервером",
-                        Toast.LENGTH_LONG).show();
-
+            } catch (Exception e) {
+                Toast.makeText(this, "Ошибка: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         });
     }
